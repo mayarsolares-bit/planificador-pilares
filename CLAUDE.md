@@ -12,12 +12,13 @@ Sin backend, sin base de datos, sin login: todo se guarda en el navegador (`loca
 ```
 APP CONTENIDO/
 ├── index.html            # Toda la app (HTML + CSS + JS en un solo archivo autocontenido)
-├── img/                  # 6 fotos, una por día: lunes/martes/miercoles/jueves/viernes/sabado.jpg
+├── manifest.json         # Configuración PWA (nombre, colores de marca, íconos, standalone)
+├── img/                  # 6 fotos por día (lunes…sabado.jpg) + íconos PWA (icon-180/192/512.png)
 ├── README.md             # Descripción + pasos de publicación
 ├── CLAUDE.md             # Este archivo
 └── App Contenido.docx    # Instrucciones de Maya. NO se publica (fuera de control de versiones)
 ```
-- `index.html` es el único archivo del sitio. No hay build ni dependencias locales.
+- `index.html` + `manifest.json` + los íconos son lo que se publica. No hay build ni dependencias locales.
 
 ## Cómo funciona (secciones de la app)
 1. **Cabecera:** logo en texto `@soymayasolares` + título "Planificador de Pilares · Solares Método".
@@ -50,6 +51,22 @@ APP CONTENIDO/
 - **Imágenes:** las fotos del hero se optimizan (~1200 px) y se nombran en minúsculas sin acentos.
   Las fotos que sube la usuaria (historia/carrusel) se **comprimen antes de guardarse** en
   `localStorage` (para no llenar el navegador). El hero NO usa `loading="lazy"` (o no cargaría).
+
+## PWA (app instalable en el celular)
+La app es una **PWA**: se puede instalar desde el navegador y se abre en **pantalla completa** (standalone),
+con el **logotipo de marca** como ícono.
+- **`manifest.json`:** nombre "Planificador de Pilares — Solares Método", short_name "Pilares",
+  `display: standalone`, `background_color`/`theme_color` = navy `#0D1B2A` (paleta de marca),
+  íconos 192 y 512 con `purpose: "any maskable"` (ícono adaptivo en Android).
+- **Íconos** (en `img/`, generados del logo — monograma "M" dorado sobre navy):
+  `icon-192x192.png`, `icon-512x512.png` y `icon-180x180.png` (este último = `apple-touch-icon`).
+- **iPhone:** en el `<head>` de `index.html` van `apple-mobile-web-app-capable`,
+  `apple-mobile-web-app-status-bar-style` y `apple-mobile-web-app-title` ("Pilares"),
+  para que se instale y abra en pantalla completa en iOS.
+- **Instalar:** Android/Chrome → menú → "Agregar a pantalla de inicio"; iPhone/Safari → Compartir →
+  "Agregar a inicio".
+- Los 3 archivos de logo originales (`icono3.png`, `ícono 2.png`, `íconoc.png`) son duplicados de los
+  íconos con nombre limpio; quedan sin rastrear (no se publican).
 
 ## Reglas duras / preferencias de Maya
 - **Español con puntuación completa:** `¿…?` y `¡…!` de apertura y cierre. En inglés solo el de cierre.
