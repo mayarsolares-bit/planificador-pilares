@@ -1,0 +1,615 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Una muestra de cómo organizar tu contenido: cada día, su pilar, con espacio para tu tema, guion de reel y carrusel." />
+<title>Planificador de Pilares — Solares Método</title>
+
+<!-- Vista previa al compartir el enlace (WhatsApp, redes) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Planificador de Pilares — Solares Método" />
+<meta property="og:description" content="Una muestra de cómo organizar tu contenido: cada día, su pilar, con espacio para tu tema, guion de reel y carrusel." />
+<meta property="og:image" content="img/lunes.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Planificador de Pilares — Solares Método" />
+<meta name="twitter:description" content="Una muestra de cómo organizar tu contenido: cada día, su pilar, con espacio para tu tema, guion de reel y carrusel." />
+<meta name="twitter:image" content="img/lunes.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+
+<style>
+  /* ===================== BASE / TOKENS ===================== */
+  :root {
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Montserrat', system-ui, sans-serif;
+    --script: 'Great Vibes', cursive;
+
+    --bg: #0D1B2A; --surface: #14273b; --surface-2: #1b3149;
+    --text: #F5F0E8; --muted: #b9c2cf; --accent: #C9A96E;
+    --accent-soft: rgba(201, 169, 110, 0.16); --line: rgba(245, 240, 232, 0.16);
+    --shadow: rgba(0, 0, 0, 0.28);
+  }
+
+  /* Días NAVY: lunes, miércoles, viernes */
+  body[data-dia="lunes"], body[data-dia="miercoles"], body[data-dia="viernes"] {
+    --bg: #0D1B2A; --surface: #14273b; --surface-2: #1b3149;
+    --text: #F5F0E8; --muted: #b9c2cf; --accent: #C9A96E;
+    --accent-soft: rgba(201, 169, 110, 0.16); --line: rgba(245, 240, 232, 0.16);
+    --shadow: rgba(0, 0, 0, 0.30);
+  }
+  /* Días VINO/PLUM: martes, jueves */
+  body[data-dia="martes"], body[data-dia="jueves"] {
+    --bg: #740535; --surface: #85174a; --surface-2: #96285b;
+    --text: #F5F0E8; --muted: #e8c9d6; --accent: #C9A96E;
+    --accent-soft: rgba(201, 169, 110, 0.18); --line: rgba(245, 240, 232, 0.18);
+    --shadow: rgba(60, 2, 27, 0.35);
+  }
+  /* SÁBADO: alto contraste blanco / negro */
+  body[data-dia="sabado"] {
+    --bg: #ffffff; --surface: #ffffff; --surface-2: #f2f2f2;
+    --text: #101010; --muted: #555555; --accent: #101010;
+    --accent-soft: rgba(16, 16, 16, 0.07); --line: rgba(16, 16, 16, 0.16);
+    --shadow: rgba(0, 0, 0, 0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--sans); background: var(--bg); color: var(--text);
+    line-height: 1.55; min-height: 100vh;
+    transition: background-color 0.55s ease, color 0.55s ease;
+    padding: clamp(16px, 4vw, 40px); display: flex; justify-content: center;
+  }
+  .app { width: 100%; max-width: 1080px; }
+
+  /* ===================== HEADER ===================== */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; padding-bottom: 22px;
+    border-bottom: 1px solid var(--line); margin-bottom: 28px;
+  }
+  .marca .handle { font-family: var(--script); font-size: clamp(30px, 5vw, 42px); color: var(--accent); line-height: 1; display: block; }
+  .marca .sub { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+  .titulo-app { text-align: right; }
+  .titulo-app h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(18px, 3vw, 26px); line-height: 1.15; }
+  .titulo-app span { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); }
+
+  /* ===================== SELECTOR DE DÍA ===================== */
+  .dias { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 30px; }
+  .dia-btn {
+    font-family: var(--sans); font-weight: 500; background: var(--surface); color: var(--text);
+    border: 1px solid var(--line); border-radius: 14px; padding: 12px 6px; cursor: pointer;
+    text-align: center; transition: transform 0.15s ease, border-color 0.25s ease, background-color 0.25s ease;
+  }
+  .dia-btn .d-corto { display: block; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; }
+  .dia-btn .d-hoy { display: block; font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-top: 3px; min-height: 11px; opacity: 0; }
+  .dia-btn.es-hoy .d-hoy { opacity: 1; }
+  .dia-btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .dia-btn.activo { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  body[data-dia="sabado"] .dia-btn.activo { color: #ffffff; }
+  .dia-btn.activo .d-hoy { color: var(--bg); opacity: 1; }
+  body[data-dia="sabado"] .dia-btn.activo .d-hoy { color: #ffffff; }
+
+  /* ===================== TARJETA PRINCIPAL ===================== */
+  .panel {
+    display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(20px, 3vw, 40px);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+    padding: clamp(22px, 3vw, 40px); box-shadow: 0 20px 50px -30px var(--shadow);
+  }
+  .hero-col { display: flex; flex-direction: column; }
+  .ilustracion {
+    color: var(--accent); background: var(--surface-2); border-radius: 18px; padding: 0;
+    display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3;
+    margin-bottom: 22px; overflow: hidden;
+  }
+  .ilustracion.con-svg { padding: 24px; }
+  .ilustracion svg { width: 100%; height: 100%; }
+  .foto-dia { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
+  .pilar-etq { font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .pilar-nombre { font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 4vw, 38px); line-height: 1.08; margin-bottom: 12px; }
+  .pilar-desc { color: var(--muted); font-weight: 300; font-size: 15px; max-width: 40ch; }
+
+  .work-col { display: flex; flex-direction: column; }
+  .campo-label { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
+
+  /* Campos de texto (tema + editores) */
+  .campo {
+    width: 100%; font-family: var(--sans); font-size: 15px; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 14px; resize: vertical; transition: border-color 0.2s ease;
+  }
+  .campo::placeholder { color: var(--muted); opacity: 0.7; }
+  .campo:focus { outline: none; border-color: var(--accent); }
+  .tema { min-height: 58px; margin-bottom: 26px; }
+
+  .check-titulo { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .check-titulo h2 { font-family: var(--serif); font-weight: 600; font-size: 20px; }
+  .progreso-txt { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .barra { height: 6px; background: var(--accent-soft); border-radius: 99px; overflow: hidden; margin-bottom: 20px; }
+  .barra-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
+
+  /* ===================== FORMATOS (acordeón + editores) ===================== */
+  .formatos { display: flex; flex-direction: column; gap: 10px; }
+  .formato { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .formato-head { display: flex; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; user-select: none; }
+  .listo-btn {
+    flex: none; width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--accent);
+    background: transparent; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0; transition: background-color 0.2s ease;
+  }
+  .listo-btn svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.5); transition: all 0.2s ease; }
+  .listo-btn.done { background: var(--accent); }
+  .listo-btn.done svg { opacity: 1; transform: scale(1); }
+  .formato-titulo { flex: 1; font-size: 15px; }
+  .formato-titulo.tachado { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--accent); }
+  .mini { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  .caret { flex: none; color: var(--muted); display: flex; transition: transform 0.25s ease; }
+  .caret svg { width: 16px; height: 16px; }
+  .formato.abierto .caret { transform: rotate(180deg); }
+  .formato-body { display: none; padding: 0 15px 16px; }
+  .formato.abierto .formato-body { display: block; }
+
+  /* Controles de imagen */
+  .img-ctrl { margin-top: 10px; }
+  .img-subir {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px dashed var(--accent);
+    color: var(--accent); border-radius: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px;
+  }
+  .img-prev img { max-width: 170px; width: 100%; border-radius: 10px; display: block; margin-bottom: 8px; border: 1px solid var(--line); }
+  .btn-mini {
+    font-family: var(--sans); font-size: 12px; background: transparent; border: 1px solid var(--line);
+    color: var(--text); border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  }
+  .btn-mini:hover { border-color: var(--accent); }
+
+  /* Guion — tabla de reel */
+  .guion { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .guion-cab { display: none; }
+  .guion-fila { padding: 12px; border-bottom: 1px solid var(--line); }
+  .guion-fila:last-child { border-bottom: none; }
+  .g-tiempo { font-weight: 600; font-size: 13px; color: var(--accent); margin-bottom: 10px; }
+  .g-campo { margin-bottom: 10px; }
+  .g-campo:last-child { margin-bottom: 0; }
+  .g-campo > label { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 5px; }
+  .g-campo .campo { min-height: 52px; }
+  @media (min-width: 640px) {
+    .guion-cab, .guion-fila { display: grid; grid-template-columns: 132px 1fr 1fr; gap: 12px; align-items: start; }
+    .guion-cab { display: grid; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .g-tiempo { margin-bottom: 0; align-self: center; }
+    .g-campo { margin-bottom: 0; }
+    .g-campo > label { display: none; }
+  }
+
+  /* Carrusel — diapositivas */
+  .carrusel-slides { display: flex; flex-direction: column; gap: 10px; }
+  .slide { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); }
+  .slide-cab { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .add-slide {
+    width: 100%; border: 1px dashed var(--accent); color: var(--accent); background: transparent;
+    border-radius: 10px; padding: 11px; cursor: pointer; font-family: var(--sans); font-size: 14px; margin-top: 4px;
+  }
+  .add-slide[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .carrusel-info { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; }
+
+  .guardado { margin-top: 22px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .guardado .punto { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+  .aviso { display: none; margin-top: 12px; font-size: 12px; color: var(--text); background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; }
+
+  /* ===================== PIE ===================== */
+  footer {
+    margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    font-size: 12px; color: var(--muted);
+  }
+  footer .firma { font-family: var(--script); font-size: 22px; color: var(--accent); }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 860px) {
+    .panel { grid-template-columns: 1fr; }
+    .titulo-app { text-align: left; }
+    header { justify-content: flex-start; }
+  }
+  @media (max-width: 560px) {
+    .dias { grid-template-columns: repeat(3, 1fr); }
+    .ilustracion { aspect-ratio: 16 / 9; }
+    .titulo-app h1 { font-size: 18px; }
+  }
+</style>
+
+<body data-dia="lunes">
+  <div class="app">
+    <header>
+      <div class="marca">
+        <span class="handle">@soymayasolares</span>
+        <span class="sub">Imagen con Propósito</span>
+      </div>
+      <div class="titulo-app">
+        <h1>Planificador de Pilares</h1>
+        <span>Solares Método</span>
+      </div>
+    </header>
+
+    <nav class="dias" id="dias" aria-label="Días de la semana"></nav>
+
+    <section class="panel">
+      <div class="hero-col">
+        <div class="ilustracion" id="ilustracion"></div>
+        <p class="pilar-etq">Pilar del día</p>
+        <h2 class="pilar-nombre" id="pilarNombre">—</h2>
+        <p class="pilar-desc" id="pilarDesc">—</p>
+      </div>
+
+      <div class="work-col">
+        <label class="campo-label" for="tema">Tema del día</label>
+        <textarea class="campo tema" id="tema" placeholder="¿Sobre qué vas a hablar hoy?"></textarea>
+
+        <div class="check-titulo">
+          <h2>Formatos a crear</h2>
+          <span class="progreso-txt" id="progresoTxt">0 de 5</span>
+        </div>
+        <div class="barra"><div class="barra-fill" id="barraFill"></div></div>
+
+        <div class="formatos" id="formatos"></div>
+
+        <p class="guardado"><span class="punto"></span> Toca cada formato para escribir y guardar tu contenido.</p>
+        <p class="aviso" id="aviso"></p>
+      </div>
+    </section>
+
+    <footer>
+      <span>Demo · Planificador de Pilares</span>
+      <span class="firma">Solares Método</span>
+    </footer>
+  </div>
+
+  <script>
+    // ===================== DATOS =====================
+    const DIAS = [
+      { id: 'lunes',     corto: 'Lun', nombre: 'Lunes',     pilar: 'Presencia que Impacta',
+        desc: 'Cómo te ven antes de que hables: imagen física, porte y primera impresión.', icono: 'presencia' },
+      { id: 'martes',    corto: 'Mar', nombre: 'Martes',    pilar: 'Autoridad que se Construye',
+        desc: 'Tu conocimiento y experiencia al servicio de otros: lo que te vuelve referente.', icono: 'autoridad' },
+      { id: 'miercoles', corto: 'Mié', nombre: 'Miércoles', pilar: 'Tu Voz, Tu Poder',
+        desc: 'Tu mensaje y la manera en que dices lo que tienes que decir.', icono: 'voz' },
+      { id: 'jueves',    corto: 'Jue', nombre: 'Jueves',    pilar: 'El Entorno que te Representa',
+        desc: 'Los espacios, detalles y contexto que hablan por ti.', icono: 'entorno' },
+      { id: 'viernes',   corto: 'Vie', nombre: 'Viernes',   pilar: 'Testimonios',
+        desc: 'La voz de quienes ya vivieron tu trabajo: prueba y confianza.', icono: 'testimonios' },
+      { id: 'sabado',    corto: 'Sáb', nombre: 'Sábado',    pilar: 'Contenido especial',
+        desc: 'Un post único para conectar distinto este sábado.', icono: 'especial', especial: true },
+    ];
+
+    // Definición de cada formato y su tipo de editor
+    const FORMATOS = {
+      historia: { label: 'Historia (Instagram Stories)', tipo: 'historia', ph: 'Texto de la historia…' },
+      post:     { label: 'Post sencillo (una sola imagen con mensaje)', tipo: 'texto', ph: 'Texto del post…' },
+      guion:    { label: 'Guion', tipo: 'guion' },
+      caption:  { label: 'Caption', tipo: 'texto', ph: 'Escribe el caption…' },
+      carrusel: { label: 'Carrusel', tipo: 'carrusel' },
+    };
+    const FORMATOS_SEMANA = ['historia', 'post', 'guion', 'caption', 'carrusel'];
+    const FORMATOS_SABADO = ['post', 'caption'];
+
+    // Bloques de tiempo fijos del guion (reel de 18 s)
+    const GUION_BLOQUES = ['0–3 s · Gancho', '3–8 s · Contexto', '8–14 s · Desarrollo', '14–18 s · Cierre / CTA'];
+    const MAX_SLIDES = 15;
+
+    const formatosDe = (dia) => (dia.especial ? FORMATOS_SABADO : FORMATOS_SEMANA);
+
+    // ===================== ILUSTRACIONES (SVG en línea) =====================
+    const svgWrap = (inner) =>
+      `<svg viewBox="0 0 200 150" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+    const ICONOS = {
+      presencia: svgWrap(`
+        <circle cx="100" cy="72" r="34" opacity="0.35"/>
+        <g stroke-width="1" opacity="0.5">
+          <line x1="100" y1="18" x2="100" y2="30"/><line x1="146" y1="42" x2="138" y2="49"/>
+          <line x1="54" y1="42" x2="62" y2="49"/><line x1="160" y1="80" x2="149" y2="80"/>
+          <line x1="40" y1="80" x2="51" y2="80"/>
+        </g>
+        <path d="M86 108c0-14 6-22 6-30 0-8-5-12-5-20 0-9 7-16 16-16s15 7 15 15c0 12-8 16-8 26 0 8 5 13 5 25"/>
+        <path d="M78 128c4-10 14-14 22-14s18 4 22 14"/>`),
+      autoridad: svgWrap(`
+        <path d="M64 44h72l-8-12H72z"/>
+        <line x1="76" y1="44" x2="76" y2="104"/><line x1="90" y1="44" x2="90" y2="104"/>
+        <line x1="110" y1="44" x2="110" y2="104"/><line x1="124" y1="44" x2="124" y2="104"/>
+        <path d="M58 104h84l6 14H52z"/><path d="M92 30l8-12 8 12" opacity="0.6"/>`),
+      voz: svgWrap(`
+        <path d="M70 60v30l24 18V42z"/><path d="M112 58c8 6 8 28 0 34" opacity="0.9"/>
+        <path d="M124 46c16 12 16 46 0 58" opacity="0.6"/><path d="M136 34c24 18 24 64 0 82" opacity="0.35"/>`),
+      entorno: svgWrap(`
+        <rect x="52" y="34" width="96" height="82" rx="4"/>
+        <path d="M62 116l24-30 16 18 14-16 22 28" opacity="0.8"/><circle cx="122" cy="58" r="8" opacity="0.7"/>`),
+      testimonios: svgWrap(`
+        <path d="M64 56c-9 0-16 7-16 16s7 15 16 15c0 8-5 13-12 15" opacity="0.9"/>
+        <path d="M104 56c-9 0-16 7-16 16s7 15 16 15c0 8-5 13-12 15" opacity="0.9"/>
+        <path d="M138 92l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z"/>`),
+      especial: svgWrap(`
+        <path d="M100 34l7 30 30 7-30 7-7 30-7-30-30-7 30-7z"/>
+        <path d="M150 44l3 10 10 3-10 3-3 10-3-10-10-3 10-3z" opacity="0.6"/>
+        <path d="M52 96l2 8 8 2-8 2-2 8-2-8-8-2 8-2z" opacity="0.6"/>`),
+    };
+    const CHECK_MARK = `<svg viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3.2"
+      stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>`;
+    const CARET = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+
+    // ===================== PERSISTENCIA =====================
+    const STORAGE_KEY = 'planificador-pilares-solares-v2';
+    let estado = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } })();
+
+    function escribir() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(estado)); return true; }
+      catch (e) { return false; }
+    }
+    let avisoTimer = null;
+    function guardar() {
+      const ok = escribir();
+      if (!ok) {
+        $aviso.textContent = 'No se pudo guardar: el espacio del navegador está lleno. Prueba con menos fotos o imágenes más pequeñas.';
+        $aviso.style.display = 'block';
+        clearTimeout(avisoTimer); avisoTimer = setTimeout(() => { $aviso.style.display = 'none'; }, 7000);
+      }
+      return ok;
+    }
+
+    function estadoDia(id) {
+      if (!estado[id]) estado[id] = { tema: '', listo: {}, cont: {} };
+      const d = estado[id];
+      d.listo = d.listo || {}; d.cont = d.cont || {};
+      return d;
+    }
+    function contDefault(tipo) {
+      if (tipo === 'historia') return { texto: '', img: '' };
+      if (tipo === 'texto')    return { texto: '' };
+      if (tipo === 'guion')    return GUION_BLOQUES.map(() => ({ video: '', texto: '' }));
+      if (tipo === 'carrusel') return [{ texto: '', img: '' }];
+      return {};
+    }
+    function getCont(est, fid, tipo) {
+      if (!est.cont[fid]) est.cont[fid] = contDefault(tipo);
+      // Saneado del guion por si cambió el nº de bloques
+      if (tipo === 'guion') {
+        while (est.cont[fid].length < GUION_BLOQUES.length) est.cont[fid].push({ video: '', texto: '' });
+      }
+      if (tipo === 'carrusel' && est.cont[fid].length === 0) est.cont[fid].push({ texto: '', img: '' });
+      return est.cont[fid];
+    }
+    function tieneContenido(tipo, cont) {
+      const t = (s) => !!(s && s.trim());
+      if (tipo === 'historia') return t(cont.texto) || !!cont.img;
+      if (tipo === 'texto')    return t(cont.texto);
+      if (tipo === 'guion')    return cont.some((r) => t(r.video) || t(r.texto));
+      if (tipo === 'carrusel') return cont.some((s) => t(s.texto) || !!s.img);
+      return false;
+    }
+
+    // ===================== IMAGEN: reducir tamaño antes de guardar =====================
+    function comprimirImagen(file, maxW, cb) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const im = new Image();
+        im.onload = () => {
+          let w = im.width, h = im.height;
+          if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          c.getContext('2d').drawImage(im, 0, 0, w, h);
+          try { cb(c.toDataURL('image/jpeg', 0.72)); } catch (err) { cb(''); }
+        };
+        im.onerror = () => cb('');
+        im.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Control reutilizable de foto (Historia y diapositivas del carrusel)
+    function controlImagen(getImg, setImg, onSave) {
+      const wrap = document.createElement('div'); wrap.className = 'img-ctrl';
+      function pintar() {
+        wrap.innerHTML = '';
+        const img = getImg();
+        if (img) {
+          const box = document.createElement('div'); box.className = 'img-prev';
+          const el = document.createElement('img'); el.src = img; el.alt = 'Vista previa'; box.appendChild(el);
+          const quitar = document.createElement('button'); quitar.type = 'button'; quitar.className = 'btn-mini'; quitar.textContent = 'Quitar foto';
+          quitar.addEventListener('click', () => { setImg(''); onSave(); pintar(); });
+          wrap.append(box, quitar);
+        } else {
+          const label = document.createElement('label'); label.className = 'img-subir';
+          const span = document.createElement('span'); span.textContent = '+ Subir foto';
+          const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.hidden = true;
+          input.addEventListener('change', () => {
+            const file = input.files && input.files[0]; if (!file) return;
+            comprimirImagen(file, 900, (data) => { if (data) { setImg(data); onSave(); pintar(); } });
+          });
+          label.append(span, input); wrap.appendChild(label);
+        }
+      }
+      pintar(); return wrap;
+    }
+
+    // ===================== EDITORES POR TIPO =====================
+    function construirEditor(cont, tipo, ph, onSave) {
+      // onSave() guarda y refresca la etiqueta "con contenido"; devuelve nada
+      if (tipo === 'texto' || tipo === 'historia') {
+        const wrap = document.createElement('div');
+        const ta = document.createElement('textarea');
+        ta.className = 'campo'; ta.rows = tipo === 'historia' ? 3 : 3; ta.placeholder = ph || 'Escribe aquí…';
+        ta.style.minHeight = '68px'; ta.value = cont.texto || '';
+        ta.addEventListener('input', () => { cont.texto = ta.value; onSave(); });
+        wrap.appendChild(ta);
+        if (tipo === 'historia') {
+          wrap.appendChild(controlImagen(() => cont.img, (v) => { cont.img = v; }, onSave));
+        }
+        return wrap;
+      }
+
+      if (tipo === 'guion') {
+        const g = document.createElement('div'); g.className = 'guion';
+        const cab = document.createElement('div'); cab.className = 'guion-cab';
+        cab.innerHTML = '<span>Tiempo</span><span>Video (acción)</span><span>Texto</span>';
+        g.appendChild(cab);
+        GUION_BLOQUES.forEach((t, i) => {
+          const fila = document.createElement('div'); fila.className = 'guion-fila';
+          const tiempo = document.createElement('div'); tiempo.className = 'g-tiempo'; tiempo.textContent = t;
+          const cVideo = document.createElement('div'); cVideo.className = 'g-campo';
+          cVideo.innerHTML = '<label>Video (acción)</label>';
+          const taV = document.createElement('textarea'); taV.className = 'campo'; taV.placeholder = 'Qué se ve / acción…'; taV.value = cont[i].video || '';
+          taV.addEventListener('input', () => { cont[i].video = taV.value; onSave(); });
+          cVideo.appendChild(taV);
+          const cTexto = document.createElement('div'); cTexto.className = 'g-campo';
+          cTexto.innerHTML = '<label>Texto</label>';
+          const taT = document.createElement('textarea'); taT.className = 'campo'; taT.placeholder = 'Texto / lo que dices…'; taT.value = cont[i].texto || '';
+          taT.addEventListener('input', () => { cont[i].texto = taT.value; onSave(); });
+          cTexto.appendChild(taT);
+          fila.append(tiempo, cVideo, cTexto);
+          g.appendChild(fila);
+        });
+        return g;
+      }
+
+      if (tipo === 'carrusel') {
+        const wrap = document.createElement('div');
+        const lista = document.createElement('div'); lista.className = 'carrusel-slides';
+        const info = document.createElement('p'); info.className = 'carrusel-info';
+        const add = document.createElement('button'); add.type = 'button'; add.className = 'add-slide';
+        function pintar() {
+          lista.innerHTML = '';
+          cont.forEach((slide, i) => {
+            const s = document.createElement('div'); s.className = 'slide';
+            const cab = document.createElement('div'); cab.className = 'slide-cab';
+            const num = document.createElement('span'); num.className = 'slide-num'; num.textContent = 'Diapositiva ' + (i + 1);
+            cab.appendChild(num);
+            if (cont.length > 1) {
+              const quitar = document.createElement('button'); quitar.type = 'button'; quitar.className = 'btn-mini'; quitar.textContent = 'Eliminar';
+              quitar.addEventListener('click', () => { cont.splice(i, 1); onSave(); pintar(); });
+              cab.appendChild(quitar);
+            }
+            const ta = document.createElement('textarea'); ta.className = 'campo'; ta.placeholder = 'Texto de la diapositiva…'; ta.style.minHeight = '56px'; ta.value = slide.texto || '';
+            ta.addEventListener('input', () => { slide.texto = ta.value; onSave(); });
+            const img = controlImagen(() => slide.img, (v) => { slide.img = v; }, onSave);
+            s.append(cab, ta, img);
+            lista.appendChild(s);
+          });
+          info.textContent = cont.length + ' / ' + MAX_SLIDES + ' diapositivas';
+          add.disabled = cont.length >= MAX_SLIDES;
+          add.textContent = cont.length >= MAX_SLIDES ? 'Máximo de 15 diapositivas' : '+ Añadir diapositiva';
+        }
+        add.addEventListener('click', () => {
+          if (cont.length >= MAX_SLIDES) return;
+          cont.push({ texto: '', img: '' }); onSave(); pintar();
+        });
+        wrap.append(lista, add, info);
+        pintar();
+        return wrap;
+      }
+
+      return document.createElement('div');
+    }
+
+    // ===================== RENDER =====================
+    const $dias = document.getElementById('dias');
+    const $ilustracion = document.getElementById('ilustracion');
+    const $pilarNombre = document.getElementById('pilarNombre');
+    const $pilarDesc = document.getElementById('pilarDesc');
+    const $tema = document.getElementById('tema');
+    const $formatos = document.getElementById('formatos');
+    const $progresoTxt = document.getElementById('progresoTxt');
+    const $barraFill = document.getElementById('barraFill');
+    const $aviso = document.getElementById('aviso');
+
+    let diaActivo = null;
+
+    const hoyJs = new Date().getDay();
+    const mapaHoy = { 1: 'lunes', 2: 'martes', 3: 'miercoles', 4: 'jueves', 5: 'viernes', 6: 'sabado' };
+    const idHoy = mapaHoy[hoyJs] || null;
+
+    DIAS.forEach((dia) => {
+      const btn = document.createElement('button');
+      btn.className = 'dia-btn' + (dia.id === idHoy ? ' es-hoy' : '');
+      btn.dataset.id = dia.id;
+      btn.innerHTML = `<span class="d-corto">${dia.corto}</span><span class="d-hoy">Hoy</span>`;
+      btn.addEventListener('click', () => seleccionarDia(dia.id));
+      $dias.appendChild(btn);
+    });
+
+    function seleccionarDia(id) {
+      const dia = DIAS.find((d) => d.id === id);
+      if (!dia) return;
+      diaActivo = dia;
+      document.body.dataset.dia = id;
+      document.querySelectorAll('.dia-btn').forEach((b) => b.classList.toggle('activo', b.dataset.id === id));
+
+      $ilustracion.classList.remove('con-svg');
+      $ilustracion.innerHTML = '';
+      const foto = document.createElement('img');
+      foto.className = 'foto-dia'; foto.src = `img/${dia.id}.jpg`; foto.alt = dia.pilar;
+      foto.addEventListener('error', () => { $ilustracion.classList.add('con-svg'); $ilustracion.innerHTML = ICONOS[dia.icono] || ''; });
+      $ilustracion.appendChild(foto);
+      $pilarNombre.textContent = dia.pilar;
+      $pilarDesc.textContent = dia.desc;
+
+      const est = estadoDia(id);
+      $tema.value = est.tema || '';
+      construirFormatos(dia, est);
+      actualizarProgreso(dia, est);
+    }
+
+    function construirFormatos(dia, est) {
+      $formatos.innerHTML = '';
+      formatosDe(dia).forEach((fid) => {
+        const f = FORMATOS[fid];
+        const cont = getCont(est, fid, f.tipo);
+
+        const item = document.createElement('div'); item.className = 'formato'; item.dataset.fid = fid;
+        const head = document.createElement('div'); head.className = 'formato-head';
+
+        const listo = document.createElement('button');
+        listo.type = 'button'; listo.className = 'listo-btn' + (est.listo[fid] ? ' done' : '');
+        listo.setAttribute('aria-label', 'Marcar como listo'); listo.innerHTML = CHECK_MARK;
+
+        const titulo = document.createElement('span');
+        titulo.className = 'formato-titulo' + (est.listo[fid] ? ' tachado' : ''); titulo.textContent = f.label;
+
+        const mini = document.createElement('span'); mini.className = 'mini';
+        const caret = document.createElement('span'); caret.className = 'caret'; caret.innerHTML = CARET;
+        head.append(listo, titulo, mini, caret);
+
+        const body = document.createElement('div'); body.className = 'formato-body';
+        const refrescarMini = () => { mini.textContent = tieneContenido(f.tipo, cont) ? 'Con contenido' : ''; };
+        const onSave = () => { guardar(); refrescarMini(); };
+        body.appendChild(construirEditor(cont, f.tipo, f.ph, onSave));
+        refrescarMini();
+
+        listo.addEventListener('click', (e) => {
+          e.stopPropagation();
+          est.listo[fid] = !est.listo[fid];
+          listo.classList.toggle('done', est.listo[fid]);
+          titulo.classList.toggle('tachado', est.listo[fid]);
+          guardar(); actualizarProgreso(dia, est);
+        });
+        head.addEventListener('click', () => item.classList.toggle('abierto'));
+
+        item.append(head, body);
+        $formatos.appendChild(item);
+      });
+    }
+
+    function actualizarProgreso(dia, est) {
+      const ids = formatosDe(dia);
+      const hechos = ids.filter((fid) => est.listo[fid]).length;
+      $progresoTxt.textContent = `${hechos} de ${ids.length}`;
+      $barraFill.style.width = `${(hechos / ids.length) * 100}%`;
+    }
+
+    $tema.addEventListener('input', () => {
+      if (!diaActivo) return;
+      estadoDia(diaActivo.id).tema = $tema.value;
+      guardar();
+    });
+
+    seleccionarDia(idHoy || 'lunes');
+  </script>
+</body>
