@@ -610,4 +610,12 @@
       $barraFill.style.width = `${(hechos / ids.length) * 100}%`;
     }
 
-    $tema.addEventListener('input', () =>
+    $tema.addEventListener('input', () => {
+      if (!diaActivo) return;
+      estadoDia(diaActivo.id).tema = $tema.value;
+      guardar();
+    });
+
+    seleccionarDia(idHoy || 'lunes');
+  </script>
+</body>
