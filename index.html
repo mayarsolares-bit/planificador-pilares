@@ -3,6 +3,11 @@
 <meta name="description" content="Una muestra de cómo organizar tu contenido: cada día, su pilar, con espacio para tu tema, guion de reel y carrusel." />
 <title>Planificador de Pilares — Solares Método</title>
 
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#0D1B2A" />
+<link rel="apple-touch-icon" href="/img/icon-180x180.png" />
+
 <!-- Vista previa al compartir el enlace (WhatsApp, redes) -->
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Planificador de Pilares — Solares Método" />
@@ -605,12 +610,4 @@
       $barraFill.style.width = `${(hechos / ids.length) * 100}%`;
     }
 
-    $tema.addEventListener('input', () => {
-      if (!diaActivo) return;
-      estadoDia(diaActivo.id).tema = $tema.value;
-      guardar();
-    });
-
-    seleccionarDia(idHoy || 'lunes');
-  </script>
-</body>
+    $tema.addEventListener('input', () =>

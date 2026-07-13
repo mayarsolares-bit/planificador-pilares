@@ -1,0 +1,23 @@
+{
+  "name": "Planificador de Pilares — Solares Método",
+  "short_name": "Pilares",
+  "description": "Organiza tu contenido de Instagram y LinkedIn según el pilar de cada día de la semana.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D1B2A",
+  "theme_color": "#0D1B2A",
+  "icons": [
+    {
+      "src": "/img/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
